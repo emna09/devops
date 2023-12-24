@@ -59,6 +59,7 @@ pipeline {
 
     post {
         always {
+            echo "This is always executed"
             // Ajoutez ici les étapes qui doivent être exécutées après chaque build
         }
     }

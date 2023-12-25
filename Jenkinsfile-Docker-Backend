@@ -21,7 +21,7 @@ pipeline {
     post {
         always {
             //slack
-            echo "This is always executed"d
+            echo "This is always executed"
         }
     }
 }

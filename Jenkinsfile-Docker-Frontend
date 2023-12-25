@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    tools {
+         nodejs 'nodejs'
+    }
+        environment {
+            SCANNER_HOME = tool 'sonar'
+            PROJECT_NAME = 'angular-16-client'
+    }
+    stages{
+        stage('Get Code from Github') {
+                steps {
+                    checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/emna09/devops.git']])
+                }
+        }
+
+        stage('Build maven'){
+            steps{
+                dir('./spring-boot-angular-16-postgresql-example-master/angular-16-client') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Sonar Qube Analysis') {
+            steps {
+                dir('./spring-boot-angular-16-postgresql-example-master/angular-16-client') {
+                    withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar')  {
+                    sh '''$SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectKey=$PROJECT_NAME \
+                        -Dsonar.sources=.'''
+                }
+            }
+        }
+    }
+    post {
+    success {
+      slackSend color: '#36a64f', message: "Deploy of frontend succeeded"
+    }
+    failure {
+      slackSend color: '#ff0000', message: "Deploy of frontend failed"
+    }
+  }
+}}

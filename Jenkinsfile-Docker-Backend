@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+        tools {
+        maven 'maven'
+    }
+    stages{
+                stage('Get Code from Github') {
+                steps {
+                    checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/emna09/devops.git']])
+                }
+        }
+
+        stage('Build maven'){
+            steps{
+                dir('./spring-boot-angular-16-postgresql-example-master/spring-boot-server') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            //slack
+            echo "This is always executed"d
+        }
+    }
+}

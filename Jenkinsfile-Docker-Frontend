@@ -32,8 +32,8 @@ pipeline {
                         -Dsonar.sources=.'''
                 }
             }
+         }
         }
-    }
     post {
     success {
       slackSend color: '#36a64f', message: "Deploy of frontend succeeded"

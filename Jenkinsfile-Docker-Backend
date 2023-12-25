@@ -4,7 +4,7 @@ pipeline {
         maven 'maven'
     }
     stages{
-                stage('Get Code from Github') {
+        stage('Get Code from Github') {
                 steps {
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/emna09/devops.git']])
                 }
@@ -14,6 +14,16 @@ pipeline {
             steps{
                 dir('./spring-boot-angular-16-postgresql-example-master/spring-boot-server') {
                     sh 'mvn install -DskipTests'
+                }
+            }
+        }
+
+        stage('Sonar Qube Analysis') {
+            steps {
+                dir('./spring-boot-angular-16-postgresql-example-master/spring-boot-server') {
+                    withSonarQubeEnv('sonar'){
+                        sh 'mvn sonar:sonar'
+                    }
                 }
             }
         }

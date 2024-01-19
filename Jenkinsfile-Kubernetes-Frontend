@@ -14,7 +14,7 @@ pipeline {
                 }
         }
 
-        stage('Build maven'){
+        stage('npm Build'){
             steps{
                 dir('./spring-boot-angular-16-postgresql-example-master/angular-16-client') {
                     sh 'npm install'

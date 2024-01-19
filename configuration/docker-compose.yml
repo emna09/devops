@@ -25,7 +25,9 @@ services:
       - "9000:9000"
     networks:
       - devops-network
-
+    environment:
+      - SONARQUBE_ADMIN_LOGIN=admin
+      - SONARQUBE_ADMIN_PASSWORD=admin
 networks:
   devops-network:
     driver: bridge
